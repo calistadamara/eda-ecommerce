@@ -30,7 +30,7 @@ First thing first, we need to check the data information, you can use this code:
 ```
 ecommerce.info()
 ```
-[img]
+<img src=".." width="600" /><br >
 We can see the indication of missing value through general information. from the general information, it can be seen that the amount of data in each column is the same as the range index, so there is no missing value. However, the data type for the InvoiceDate column is not yet appropriate, so we need to convert it first.
 ```python
 # convert InvoiceDate to datetime format
@@ -125,7 +125,7 @@ then, visualize it.
 ```python
 # visualize it
 plt.figure(figsize=(10,6))
-barplot = sns.barplot(data=top10_cust, x='CustomerID', y='total_spend', color='yellow')
+barplot = sns.barplot(data=top10_cust, x='CustomerID', y='total_spend', color='yellow', order=top10_cust['CustomerID'])
 
 for bar in barplot.patches:
     barplot.annotate(
