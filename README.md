@@ -1,6 +1,6 @@
 # 📊 Exploratory Data Analysis on E-commerce Datasets 📊
 ## 🌸 Description 🌸
-Welcome! This is documentation of the results of my data analysis exploration on e-commerce data sets. 
+Welcome! This is documentation of my data analysis exploration on e-commerce data sets. 
 
 ## 🛠️ Tools and Language 🛠️
 <img align="left" alt="Visual Studio Code" width="30px" src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg" style="padding-right:10px;" />
@@ -30,7 +30,7 @@ First thing first, we need to check the data information, you can use this code:
 ```
 ecommerce.info()
 ```
-<img src=".." width="600" /><br >
+<img src="https://github.com/calistadamara/eda-ecommerce/blob/main/ecommerce/general%20info.png" width="200" /><br >
 We can see the indication of missing value through general information. from the general information, it can be seen that the amount of data in each column is the same as the range index, so there is no missing value. However, the data type for the InvoiceDate column is not yet appropriate, so we need to convert it first.
 ```python
 # convert InvoiceDate to datetime format
@@ -45,13 +45,21 @@ ecommerce.duplicated().sum()
 ```
 There is no duplicate value in this dataset.
 ## 💡 Exploratory Data Analysis 💡
-Exploratory aims to uncover insights/patterns from data that can support the process of decision-making in a business or case. Basically, there are 3 basic techniques that you can use in EDA stage:
+Exploratory aims to uncover insights/patterns from data that can support the process of decision-making in a business or case. There are 3 basic techniques that you can use in the EDA stage:
 1. Present the statistical summary of each feature.
    The statistic summary can include mean, median, mode, quartiles, and data distribution type.
-2. Present the univariate analysis. Univariate analysis is the activity to visually analyze each column one-by-one
-3. Present the multivariate analysis. Multivariate analysis is the activity of analyzing multiple variables all at once
-Beyond the basic techniques, there are also additional techniques to deep-diving the data, such as filtering techniques, group-by aggregrate and using pivot or melt table
-### 👔 1. Product trends: What are the Top 10 products with the most transactions?
+2. Present the univariate analysis. Univariate analysis is the activity to analyze each column one-by-one visually.
+3. Present the multivariate analysis. Multivariate analysis is the activity of analyzing multiple variables all at once.<br >
+Beyond the basic techniques, there are also additional techniques to deep-diving the data, such as filtering techniques, group-by aggregate, and using pivot or melt table
+
+### 🧩 1. Statistical Summary
+From the dataset, we can only provide statistical summary of the numerical columns only `Quantity` and `UnitPrice`. It's because the other columns are unique data. Here are the calculation of statistical summary.<br >
+<img src="https://github.com/calistadamara/eda-ecommerce/blob/main/ecommerce/stat%20summary%20numerical.png" width="250" /><br >
+We will also visualize the distribution of those numerical columns.<br >
+<img src="https://github.com/calistadamara/eda-ecommerce/blob/main/ecommerce/distribution%20of%20numerical.png" width="900" /><br >
+The data has a right-skewed distribution (Mean > Median) which the mean of the price is above its median value.
+
+### 👔 2. Product trends: What are the Top 10 products with the most transactions?
 We need to perform group by aggregation. Basis group-by is `Description`, while the number of transactions = count `InvoiceNo`. After aggregating, do appropriate sorting and truncation.
 ```python
 # Top 10 products with the most transactions
@@ -82,13 +90,14 @@ plt.xlabel('Products')
 plt.ylabel('Number of Transaction')
 plt.show()
 ```
+<img src="https://github.com/calistadamara/eda-ecommerce/blob/main/ecommerce/top%2010%20product%20most%20transact.png" width="500" /><br >
 From the chart above, we can conclude that 10 products that highly popular are: JUMBO BAG RED RETROSPOT, PARTY BUNTING, REGENCY CAKESTAND, WHITE HANGING HEART T-LIGHT HOLDER, TEATIME FAIRY CAKE CASES, SET OF 3 CAKE TINS PANTRY DESIGN, SET OF 4 PANTRY JELLY MOULDS, RED RETROSPOT CHARLOTTE BAG, JAM MAKING SET PRINTED, ASSORTED COLOUR BIRD ORNAMENT.<br >
 So, from this insight, here are the recommendations that we can provide:
 1. Increase Stock Levels: Ensure these products are well-stocked to meet demand and prevent stockouts.
 2. Upselling Opportunities: Bundle these popular products with other less popular or higher-margin items to increase the average transaction value.
 3. Expand Marketing Campaigns: Focus on these products in advertisements or promotions to maximize their potential further.
 
-### 👖 2. Product trends: What are the Top 10 products with the LEAST transactions?
+### 👖 3. Product trends: What are the Top 10 products with the LEAST transactions?
 To find the top least transaction product, use this code:
 ```python
 # Low 10 products in terms of transactions
@@ -101,10 +110,11 @@ low10_prod = (ecommerce
             )
 low10_prod
 ```
-The output is not so interesting to visualize, because all have single transaction.<br >
+<img src="https://github.com/calistadamara/eda-ecommerce/blob/main/ecommerce/top%2010%20product%20least%20transact.png" width="250" /><br >
+The output is not so interesting to visualize, because all products have a single transaction.<br >
 Recommendation: Consider rebranding, bundling, or discontinuing products that consistently underperform.<br >
 
-### 👛 3. Customer Behaviour: Top 10 Customers with the most spending? 
+### 👛 4. Customer Behaviour: Top 10 Customers with the most spending? 
 We need to create a new column `total_price = Quantity * UnitPrice`. Then sum it based on group-by CustomerID.
 ```python
 # create total_price column
@@ -139,9 +149,10 @@ plt.xlabel('Customer ID')
 plt.ylabel('Total Spend')
 plt.show()
 ```
+<img src="https://github.com/calistadamara/eda-ecommerce/blob/main/ecommerce/top%2010%20cust.png" width="600" /><br >
 Recommendation: Conduct a Loyalty Program --> Reward these high-spending customers with exclusive benefits such as early access to new products, discounts, or personalized offers to retain their loyalty.<br >
 
-### 🧳 4. Customer Behaviour: How many distinct products are sold? How is their price distribution? 
+### 🧳 5. Customer Behaviour: How many distinct products are sold? How is their price distribution? 
 We need to create a sub-dataframe containing `Description` and `UnitPrice` columns only, and ensure no duplication.<br >
 ```python
 prod = ecommerce.groupby('Description').agg(
@@ -170,11 +181,13 @@ sns.histplot(data=prod, x='unit_price', kde=True)
 plt.title('Distribution of Price Per-product', fontsize = 14, fontweight='bold')
 plt.xlabel('Unit Price')
 ```
+<img src="https://github.com/calistadamara/eda-ecommerce/blob/main/ecommerce/price%20distribution.png" width="600" /><br >
+
 The unit price has a right-skewed distribution (Mean > Median) which the mean of the price is above its median value.<br>
 A right-skewed price distribution indicates that most products are priced affordably, with only a few premium products priced significantly higher. This may suggest a focus on mass-market products, but premium offerings still play a role in revenue generation.<br >
 The large number of distinct products suggests a wide range of offerings, potentially catering to diverse customer needs.
 
-###  5. Customer Behaviour: From what countries do the customers come? Which country has the most loyal customers?
+### 🧣 6. Customer Behaviour: From what countries do the customers come? Which country has the most loyal customers?
 We need to group by `Country` and `CustomerID`, then take the sum of `total_price`. After that, we draw boxplot side by side countries.
 ```python
 # groupby
@@ -187,6 +200,7 @@ country_user.head()
 ```
 country_user.Country.value_counts()
 ```
+
 The top 5 countries with the most customers are: United Kingdom, Germany, France, Switzerland, and Spain<br >
 Recommendation: Invest in Key Market: Allocate more resources to the top 5 countries for marketing, logistics, and product availability to further strengthen market share.<br >
 Next, we will explore the distribution data of the top 5 countries to gain more insight about the customers in each top 5 countries.
@@ -207,6 +221,7 @@ sns.boxplot(data=country_user,
             y='total_spend', color='maroon')
 plt.title('Distribution of Customer Spending in Top 5 Countries', fontsize = 14, fontweight='bold')
 ```
+<img src="https://github.com/calistadamara/eda-ecommerce/blob/main/ecommerce/dist%20top%205%20countries.png" width="600" /><br >
 Observation:<br >
 - Top-Performing Markets: Switzerland and Germany are the strongest performers with high median spends and large spreads.
 - **Potential for Premium Segments: The United Kingdom and Switzerland show opportunities to create premium offerings targeting high spenders.
@@ -217,7 +232,7 @@ Recommendation:
    - Target high-spending customers in Switzerland and Germany with exclusive promotions or loyalty programs to maximize revenue.
    - Investigate the behavior of high spenders in the United Kingdom to understand their preferences and replicate these success factors in other markets.
 
-### 📈 6. Annual Performances (Time-series): How is the monthly count buyers profile (time series)?
+### 📈 7. Annual Performances (Time-series): How is the monthly count buyers profile (time series)?
 Create the invoice mont column from invoice date, to categorize each transaction to each month.
 ```
 ecommerce['InvoiceMonth'] = ecommerce['InvoiceDate'].dt.to_period('M')
@@ -265,7 +280,8 @@ plt.tight_layout()
 # Show the plot
 plt.show()
 ```
-### 💰 7. Annual Performances (Time-series): How is the monthly revenue profile (time series)?
+<img src="https://github.com/calistadamara/eda-ecommerce/blob/main/ecommerce/annual%20buyer%20permonth.png" width="600" /><br >
+### 💰 8. Annual Performances (Time-series): How is the monthly revenue profile (time series)?
 Same as the total buyers count, here we will create a visualization for total revenue
 ```
 # Set a light theme
@@ -297,6 +313,7 @@ plt.tight_layout()
 # Show the plot
 plt.show()
 ```
+<img src="https://github.com/calistadamara/eda-ecommerce/blob/main/ecommerce/annual%20revenue%20permonth.png" width="600" /><br >
 November is the peak month. It's because black market campaign<br >
 Recommendation<br >
 - Plan Seasonal Campaigns: Replicate the success of the Black Market campaign during other peak seasons (e.g., holidays, festivals) to maintain high transaction volumes.
@@ -304,7 +321,7 @@ Recommendation<br >
 
 ## 🏮 Recommendation 🏮
 Here is the summary of recommendations that we can provide to user/business owner:
-* for top 10 popular products:
+* for top 10 popular products:<br >
   Recommendation:
    1. Increase Stock Levels: Ensure these products are well-stocked to meet demand and prevent stockouts.
    2. Upselling Opportunities: Bundle these popular products with other less popular or higher-margin items to increase the average transaction value.
@@ -318,12 +335,12 @@ Here is the summary of recommendations that we can provide to user/business owne
   2. Focus on High-Value Segments:
    - Target high-spending customers in Switzerland and Germany with exclusive promotions or loyalty programs to maximize revenue.
    - Investigate the behavior of high spenders in the United Kingdom to understand their preferences and replicate these success factors in other markets.
-* and last, from the annual performance the peak month is November, its because of the Black Market Campaign. If the company wants to get even more profits/sales, the Company can consider to:
+* And last, from the annual performance the peak month is November, its because of the Black Market Campaign. If the company wants to get even more profits/sales, the Company can consider to:
    1. Plan Seasonal Campaigns: Replicate the success of the Black Market campaign during other peak seasons (e.g., holidays, and festivals) to maintain high transaction volumes.
    2. Extend Campaign Duration: Explore extending the duration or expanding the scope of such campaigns to sustain momentum.
       
 ## 📓 Closing 📓
-That's all for the exploratory data analysis on the e-commerce datasets. Hopefully, it can help readers to understanding the dataset through the insights presented. If there are suggestions or criticisms, don't hesitate to contact me through email. Thank you^^
+That's all for the exploratory data analysis on the e-commerce datasets. Hopefully, it can help you to get more insight and inspiration. If there are any suggestions and critics, don't hesitate to contact me through email. Thank you 🧸
 
 
 
